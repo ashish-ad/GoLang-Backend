@@ -2,9 +2,10 @@ package models
 
 import "time"
 
-type Post struct {
+type User struct {
 	ID 				uint  			`json:"id" gorm:"primaryKey"`
-	Title 		string			`json:"title"`
-	Content 	string 			`json:"content"`
+	Name 			string			`json:"name"`
+	Surname 	string 			`json:"surname"`
 	CreatedAt	time.Time		`json:"created_at"`
+	UpdatedAt time.Time   `json:"updated_at"`
 }
