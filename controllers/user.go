@@ -7,11 +7,16 @@ import (
 )
 
 type CreateUserInput struct {
-	Name		string	`json:"title" binding:"required"`
-	Surname string	`json:"content" binding:"required"`
+	Name		string	`json:"name" binding:"required"`
+	Surname string	`json:"surname" binding:"required"`
 }
 
-func CreatePost(c *gin.Context) {
+type UpdateUserInput struct {
+	Name		string	`json:"name" binding:"required"`
+	Surname string		`json:"surname" binding:"required"`
+}
+
+func CreateUser(c *gin.Context) { //Here c is context as req, res in express.js of NodeJs
 	var input CreateUserInput
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -26,4 +31,46 @@ func CreatePost(c *gin.Context) {
 	models.DB.Create(&user)
 
 	c.JSON(http.StatusOK, gin.H{"data": user})
+}
+
+
+func FindUser(c *gin.Context) {
+	var user models.User
+
+	if err := models.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": user})
+}
+
+func UpdateUser(c *gin.Context) {
+	var user models.User
+	if err := models.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "record not found"})
+	}
+
+	var input UpdateUserInput
+
+	if err := c.ShouldBindJSON(&input); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	updatedUser := models.User{Name: input.Name, Surname: input.Surname}
+
+	models.DB.Model(&user).Updates(&updatedUser)
+	c.JSON(http.StatusOK, gin.H{"Data": user})
+}
+
+func DeleteUser(c *gin.Context) {
+	var user models.User
+	if err := models.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error":"record not found"})
+		return
+	}
+
+	models.DB.Delete(&user)
+	c.JSON(http.StatusOK, gin.H{"data": "success"})
 }

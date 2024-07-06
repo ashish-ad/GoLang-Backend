@@ -24,8 +24,11 @@ func main() {
 	});
 
 	//ALl the routers are defined here
-	router.POST("/create-post", controllers.CreatePost)
-	
+	router.POST("/create-post", controllers.CreateUser)
+	router.GET("/find-user", controllers.FindUser)
+	router.GET("/find-user/:id", controllers.FindUser)
+	router.PATCH("/update-user/:id", controllers.UpdateUser)
+	router.DELETE("/delete-user/:id", controllers.DeleteUser)
 
 	models.ConnectDatabase();
 
