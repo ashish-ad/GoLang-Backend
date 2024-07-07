@@ -1,4 +1,5 @@
 main
 .env
 *.vscode
-*tmp/
+*./tmp
+*build-errors.log
