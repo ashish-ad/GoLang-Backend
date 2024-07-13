@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-backend/lib"
 	"github.com/golang-backend/models"
 )
 
@@ -28,7 +29,7 @@ func CreateUser(c *gin.Context) { //Here c is context as req, res in express.js 
 		Surname: input.Surname,
 	}
 
-	models.DB.Create(&user)
+	lib.DB.Create(&user)
 
 	c.JSON(http.StatusOK, gin.H{"data": user})
 }
@@ -37,7 +38,7 @@ func CreateUser(c *gin.Context) { //Here c is context as req, res in express.js 
 func FindUser(c *gin.Context) {
 	var user models.User
 
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
+	if err := lib.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
@@ -47,7 +48,7 @@ func FindUser(c *gin.Context) {
 
 func UpdateUser(c *gin.Context) {
 	var user models.User
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
+	if err := lib.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "record not found"})
 	}
 
@@ -60,17 +61,17 @@ func UpdateUser(c *gin.Context) {
 
 	updatedUser := models.User{Name: input.Name, Surname: input.Surname}
 
-	models.DB.Model(&user).Updates(&updatedUser)
+	lib.DB.Model(&user).Updates(&updatedUser)
 	c.JSON(http.StatusOK, gin.H{"Data": user})
 }
 
 func DeleteUser(c *gin.Context) {
 	var user models.User
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
+	if err := lib.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error":"record not found"})
 		return
 	}
 
-	models.DB.Delete(&user)
+	lib.DB.Delete(&user)
 	c.JSON(http.StatusOK, gin.H{"data": "success"})
 }

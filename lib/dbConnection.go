@@ -1,10 +1,11 @@
-package models
+package lib
 
 import (
 	"os"
 	"log"
 	"gorm.io/gorm"
 	"gorm.io/driver/postgres"
+	"github.com/golang-backend/models"
 )
 
 var DB *gorm.DB
@@ -19,7 +20,7 @@ func ConnectDatabase() {
 		panic(err)
 	}
 
-	dataBase.AutoMigrate(&User{}) // register Post model
+	dataBase.AutoMigrate(&models.User{}) // register Post model
 
 	DB = dataBase
 }

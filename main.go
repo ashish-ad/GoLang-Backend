@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/golang-backend/controllers"
-	"github.com/golang-backend/models"
+	"github.com/golang-backend/lib"
 )
 
 func main() {
@@ -30,7 +30,7 @@ func main() {
 	router.PATCH("/update-user/:id", controllers.UpdateUser)
 	router.DELETE("/delete-user/:id", controllers.DeleteUser)
 
-	models.ConnectDatabase();
+	lib.ConnectDatabase();
 
 	// run the server
 	router.Run(":"+PORT);
