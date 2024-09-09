@@ -1,20 +1,20 @@
 package controllers
 
 import (
-	"net/http"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-backend/lib"
 	"github.com/golang-backend/models"
+	"net/http"
 )
 
 type CreateUserInput struct {
-	Name		string	`json:"name" binding:"required"`
-	Surname string	`json:"surname" binding:"required"`
+	Name    string `json:"name" binding:"required"`
+	Surname string `json:"surname" binding:"required"`
 }
 
 type UpdateUserInput struct {
-	Name		string	`json:"name" binding:"required"`
-	Surname string		`json:"surname" binding:"required"`
+	Name    string `json:"name" binding:"required"`
+	Surname string `json:"surname" binding:"required"`
 }
 
 func CreateUser(c *gin.Context) { //Here c is context as req, res in express.js of NodeJs
@@ -25,7 +25,7 @@ func CreateUser(c *gin.Context) { //Here c is context as req, res in express.js 
 	}
 
 	user := models.User{
-		Name: input.Name, 
+		Name:    input.Name,
 		Surname: input.Surname,
 	}
 
@@ -33,7 +33,6 @@ func CreateUser(c *gin.Context) { //Here c is context as req, res in express.js 
 
 	c.JSON(http.StatusOK, gin.H{"data": user})
 }
-
 
 func FindUser(c *gin.Context) {
 	var user models.User
@@ -68,7 +67,7 @@ func UpdateUser(c *gin.Context) {
 func DeleteUser(c *gin.Context) {
 	var user models.User
 	if err := lib.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
-		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error":"record not found"})
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": "record not found"})
 		return
 	}
 
